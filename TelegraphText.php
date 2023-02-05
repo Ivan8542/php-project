@@ -63,9 +63,9 @@ abstract class View
 
 abstract class Storage
 {
-    abstract public function create($object);
+    abstract public function create(TelegraphText $object);
     abstract public function read($slug);
-    abstract public function update($slug);
+    abstract public function update($object, $slug);
     abstract public function delete($slug);
     abstract public function list();
 }
@@ -74,7 +74,7 @@ class FileStorage extends Storage
     public $dir = '/xampp/htdocs/welcome/';
     public function create(TelegraphText $object)
     {
-        $file = new $object;
+        $file =  $object;
         $serialize = serialize($file);
 
         $i = 1;
@@ -83,6 +83,7 @@ class FileStorage extends Storage
             $i += 1;
         }
 
+        file_put_contents($slug, $serialize);
         return $slug;
     }
     public function read($slug)
@@ -124,4 +125,11 @@ $telegraphText = new TelegraphText('Иван', 'text.txt');
 $telegraphText->editText("я", "умный");
 $telegraphText->storeText();
 echo $telegraphText->loadText();
+
+//$test = new FileStorage();
+//echo $test->create(new TelegraphText('Иван', 'text.txt'));
+$test1 = new FileStorage();
+$test1->create(new TelegraphText('Иван', 'text.txt'));
+var_dump($test1->read("text.txt_1.txt"));
+
 
