@@ -81,6 +81,7 @@ class FileStorage extends Storage
         $slug = $object->slug . '_' . $i . '.txt';
         while(file_exists($this->dir . $slug)) {
             $i += 1;
+            return; //тут нужно как то останавливать
         }
 
         file_put_contents($slug, $serialize);
@@ -104,16 +105,21 @@ class FileStorage extends Storage
     }
     public function list()
     {
+        $content = [];
         $scandir = scandir($this->dir);
         foreach ($scandir as $s) {
-
+            if ($s !== '.' & $s !== '..') {
+                $content[] = unserialize(file_get_contents($s));
+            }
         }
+
+        return $content;
 
     }
     public function delete($slug)
     {
         if (file_exists($slug)) {
-            unlink($slug);
+            unlink($this->dir . $slug);
             return true;
         }
 
@@ -130,6 +136,6 @@ echo $telegraphText->loadText();
 //echo $test->create(new TelegraphText('Иван', 'text.txt'));
 $test1 = new FileStorage();
 $test1->create(new TelegraphText('Иван', 'text.txt'));
-var_dump($test1->read("text.txt_1.txt"));
-
-
+$test1->delete("text.txt_1.txt");
+//var_dump($test1->read("text.txt_1.txt"));
+//var_dump(file_get_contents('text.txt', '/xampp/htdocs/welcome/'));
