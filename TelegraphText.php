@@ -78,14 +78,18 @@ class FileStorage extends Storage
         $serialize = serialize($file);
 
         $i = 1;
-        $slug = $object->slug . '_' . $i . '.txt';
-        while(file_exists($this->dir . $slug)) {
+
+        while(file_exists( $object->slug . '_' . $i . '.txt')) {
             $i += 1;
-            return; //тут нужно как то останавливать
         }
 
-        file_put_contents($slug, $serialize);
-        return $slug;
+        if (!file_exists($this->dir . $object->slug . '_' . $i . '.txt')) {
+            file_put_contents($this->dir . $object->slug . '_' . $i . '.txt', $serialize);
+            return $object->slug . '_' . $i . '.txt';
+        } else {
+            file_put_contents($this->dir . $object->slug . '_' . $i . '.txt', $serialize);
+            return $object->slug . '_' . $i . '.txt';
+        }
     }
     public function read($slug)
     {
@@ -108,7 +112,7 @@ class FileStorage extends Storage
         $content = [];
         $scandir = scandir($this->dir);
         foreach ($scandir as $s) {
-            if ($s !== '.' & $s !== '..') {
+            if ($s !== '.' & $s !== '..' & $s !== '.git' & $s !== '.idea') {
                 $content[] = unserialize(file_get_contents($s));
             }
         }
@@ -135,7 +139,8 @@ echo $telegraphText->loadText();
 //$test = new FileStorage();
 //echo $test->create(new TelegraphText('Иван', 'text.txt'));
 $test1 = new FileStorage();
-$test1->create(new TelegraphText('Иван', 'text.txt'));
-$test1->delete("text.txt_1.txt");
+$test1->create(new TelegraphText('Иван', 'text'));
+var_dump($test1->list());
+//$test1->delete("text.txt_1.txt");
 //var_dump($test1->read("text.txt_1.txt"));
 //var_dump(file_get_contents('text.txt', '/xampp/htdocs/welcome/'));
