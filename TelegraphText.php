@@ -112,8 +112,10 @@ class FileStorage extends Storage
         $content = [];
         $scandir = scandir($this->dir);
         foreach ($scandir as $s) {
-            if ($s !== '.' & $s !== '..' & $s !== '.git' & $s !== '.idea') {
-                $content[] = unserialize(file_get_contents($s));
+            if (!is_dir($s)) {
+                if ($s !== '.' & $s !== '..' & $s !== '.git' & $s !== '.idea') {
+                    $content[] = unserialize(file_get_contents($s));
+                }
             }
         }
 
