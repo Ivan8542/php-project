@@ -71,25 +71,22 @@ abstract class Storage
 }
 class FileStorage extends Storage
 {
-    public $dir = '/xampp/htdocs/welcome/';
+    public $dir = '/xampp/htdocs/welcome/files/';
     public function create(TelegraphText $object)
     {
         $file =  $object;
         $serialize = serialize($file);
 
+        $explodeFile = explode('.', $object->slug);
+        $newNameFile = $explodeFile[0];
         $i = 1;
 
-        while(file_exists( $object->slug . '_' . $i . '.txt')) {
+        while(file_exists( $this->dir . $newNameFile . '_' . $i . '.txt')) {
             $i += 1;
         }
 
-        if (!file_exists($this->dir . $object->slug . '_' . $i . '.txt')) {
-            file_put_contents($this->dir . $object->slug . '_' . $i . '.txt', $serialize);
-            return $object->slug . '_' . $i . '.txt';
-        } else {
-            file_put_contents($this->dir . $object->slug . '_' . $i . '.txt', $serialize);
-            return $object->slug . '_' . $i . '.txt';
-        }
+        file_put_contents($this->dir . $newNameFile . '_' . $i . '.txt', $serialize);
+        return $newNameFile . '_' . $i . '.txt';
     }
     public function read($slug)
     {
@@ -114,7 +111,7 @@ class FileStorage extends Storage
         foreach ($scandir as $s) {
             if (!is_dir($s)) {
                 if ($s !== '.' & $s !== '..' & $s !== '.git' & $s !== '.idea') {
-                    $content[] = unserialize(file_get_contents($s));
+                    $content[] = unserialize(file_get_contents($this->dir . $s));
                 }
             }
         }
@@ -141,7 +138,7 @@ echo $telegraphText->loadText();
 //$test = new FileStorage();
 //echo $test->create(new TelegraphText('Иван', 'text.txt'));
 $test1 = new FileStorage();
-$test1->create(new TelegraphText('Иван', 'text'));
+$test1->create(new TelegraphText('Иван', 'text.txt'));
 var_dump($test1->list());
 //$test1->delete("text.txt_1.txt");
 //var_dump($test1->read("text.txt_1.txt"));
