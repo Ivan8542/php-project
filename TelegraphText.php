@@ -1,5 +1,14 @@
 <?php
 
+interface LoggerInterface {
+    public function logMessage($textError);
+    public function lastMessages($count);
+}
+interface EventListenerInterface {
+    public function attachEvent($methodName, $callback);
+    public function detouchEvent ($methodName);
+}
+
 class TelegraphText
 {
     public $title;
@@ -44,7 +53,7 @@ class TelegraphText
     }
 }
 
-abstract class User
+abstract class User implements EventListenerInterface
 {
     public $id, $name, $role;
     abstract public function getTextsToEdit();
@@ -59,10 +68,29 @@ abstract class View
     }
     abstract public function displayTextById($id);
     abstract public function displayTextByUrl($url);
+
+    public function attachEvent($methodName, $callback) {
+
+    }
+    public function detouchEvent ($methodName) {
+
+    }
 }
 
-abstract class Storage
+abstract class Storage implements LoggerInterface, EventListenerInterface
 {
+    public function logMessage($textError) {
+
+    }
+    public function lastMessages($count) {
+
+    }
+    public function attachEvent($methodName, $callback) {
+
+    }
+    public function detouchEvent ($methodName) {
+
+    }
     abstract public function create(TelegraphText $object);
     abstract public function read($slug);
     abstract public function update($object, $slug);
