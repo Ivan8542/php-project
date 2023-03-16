@@ -11,11 +11,11 @@ interface EventListenerInterface {
 
 class TelegraphText
 {
-    public $title;
-    public $text;
-    public $author;
-    public $published;
-    public $slug;
+    private  $title;
+    private  $text;
+    private  $author;
+    private  $published;
+    private  $slug;
 
     public function __construct($author, $slug)
     {
@@ -23,7 +23,7 @@ class TelegraphText
         $this->slug = $slug;
         $this->published = date('d.m.Y H:i:s');
     }
-    public function storeText()
+    private function storeText()
     {
         $array = [
             "title" => $this->title,
@@ -35,7 +35,7 @@ class TelegraphText
 
         return file_put_contents($this->slug, serialize($array));
     }
-    public function loadText()
+    private function loadText()
     {
         $array = unserialize(file_get_contents($this->slug, false));
 
@@ -51,12 +51,155 @@ class TelegraphText
         $this->title = $title;
         $this->text = $text;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author)
+    {
+        if (strlen($author) <= 120) {
+            $this->author = $author;
+        } else {
+            echo "Длина строки должа быть не более 120 символов.";
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        if (preg_match('/^[a-zA-Z0-9-_]+$/', $slug)) {
+            $this->slug = $slug;
+        } else {
+            echo "Неправильно введено значение slug.";
+        }
+    }
+
+    /**
+     * @return false|string
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param false|string $published
+     */
+    public function setPublished($published)
+    {
+        if ($published >= date('d.m.Y H:i:s')) {
+            $this->published = $published;
+        } else {
+            echo "Дата должна быть настоящей.";
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param mixed $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    public function __set($name, $value)
+    {
+        if ($name == 'author') {
+            $this->setAuthor($value);
+        }
+        if ($name == 'slug') {
+            $this->setSlug($value);
+        }
+        if ($name == 'published') {
+            $this->setPublished($value);
+        }
+        if ($name == 'text') {
+            $this->setText();
+        }
+        if ($name == 'title') {
+            $this->setTitle();
+        }
+        if ($name == 'loadText') {
+            return $this->loadText();
+        }
+        if ($name == 'storeText') {
+            return $this->storeText();
+        }
+    }
+
+    public function __get($name)
+    {
+        if ($name == 'author') {
+            return $this->getAuthor();
+        }
+        if ($name == 'slug') {
+            return $this->getSlug();
+        }
+        if ($name == 'published') {
+            return $this->getPublished();
+        }
+        if ($name == 'text') {
+            return $this->getText();
+        }
+        if ($name == 'title') {
+            return $this->getTitle();
+        }
+        if ($name == 'loadText') {
+            return $this->loadText();
+        }
+        if ($name == 'storeText') {
+            return $this->storeText();
+        }
+    }
+
 }
 
 abstract class User implements EventListenerInterface
 {
-    public $id, $name, $role;
-    abstract public function getTextsToEdit();
+    protected $id, $name, $role;
+    abstract protected function getTextsToEdit();
 }
 abstract class View
 {
@@ -160,14 +303,19 @@ class FileStorage extends Storage
 
 $telegraphText = new TelegraphText('Иван', 'text.txt');
 $telegraphText->editText("я", "умный");
-$telegraphText->storeText();
-echo $telegraphText->loadText();
+$telegraphText->storeText;
+echo $telegraphText->loadText;
+$telegraphText->editText("Толик", "привет");
+$telegraphText->storeText;
+echo $telegraphText->loadText;
+
 
 //$test = new FileStorage();
 //echo $test->create(new TelegraphText('Иван', 'text.txt'));
+
+
 $test1 = new FileStorage();
 $test1->create(new TelegraphText('Иван', 'text.txt'));
 var_dump($test1->list());
-//$test1->delete("text.txt_1.txt");
-//var_dump($test1->read("text.txt_1.txt"));
-//var_dump(file_get_contents('text.txt', '/xampp/htdocs/welcome/'));
+
+
