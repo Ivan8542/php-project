@@ -156,16 +156,7 @@ class TelegraphText
             $this->setPublished($value);
         }
         if ($name == 'text') {
-            $this->setText();
-        }
-        if ($name == 'title') {
-            $this->setTitle();
-        }
-        if ($name == 'loadText') {
-            return $this->loadText();
-        }
-        if ($name == 'storeText') {
-            return $this->storeText();
+            $this->storeText();
         }
     }
 
@@ -181,16 +172,7 @@ class TelegraphText
             return $this->getPublished();
         }
         if ($name == 'text') {
-            return $this->getText();
-        }
-        if ($name == 'title') {
-            return $this->getTitle();
-        }
-        if ($name == 'loadText') {
             return $this->loadText();
-        }
-        if ($name == 'storeText') {
-            return $this->storeText();
         }
     }
 
@@ -303,11 +285,11 @@ class FileStorage extends Storage
 
 $telegraphText = new TelegraphText('Иван', 'text.txt');
 $telegraphText->editText("я", "умный");
-$telegraphText->storeText;
-echo $telegraphText->loadText;
+$telegraphText->text;
+echo $telegraphText->text;
 $telegraphText->editText("Толик", "привет");
-$telegraphText->storeText;
-echo $telegraphText->loadText;
+//$telegraphText->storeText;
+//echo $telegraphText->loadText;
 
 
 //$test = new FileStorage();
