@@ -44,7 +44,11 @@ class TelegraphText
         $this->author = $array['author'];
         $this->published = $array['published'];
 
-        return $this->text;
+        if (file_exists($this->slug)) {
+            return $this->text;
+        } else {
+            return false;
+        }
     }
     public function editText($title, $text)
     {
@@ -156,7 +160,7 @@ class TelegraphText
             $this->setPublished($value);
         }
         if ($name == 'text') {
-            $this->storeText();
+            $this->storeText($value);
         }
     }
 
@@ -285,11 +289,11 @@ class FileStorage extends Storage
 
 $telegraphText = new TelegraphText('Иван', 'text.txt');
 $telegraphText->editText("я", "умный");
-$telegraphText->text;
+$telegraphText->text = 1;
 echo $telegraphText->text;
-$telegraphText->editText("Толик", "привет");
+//$telegraphText->editText("Толик", "привет");
 //$telegraphText->storeText;
-//echo $telegraphText->loadText;
+//$telegraphText->loadText();
 
 
 //$test = new FileStorage();
