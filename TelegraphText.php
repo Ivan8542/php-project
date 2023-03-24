@@ -50,6 +50,7 @@ class TelegraphText
             return false;
         }
     }
+
     public function editText($title, $text)
     {
         $this->title = $title;
@@ -160,7 +161,8 @@ class TelegraphText
             $this->setPublished($value);
         }
         if ($name == 'text') {
-            $this->storeText($value);
+            $this->text = $value;
+            $this->storeText();
         }
     }
 
@@ -289,8 +291,9 @@ class FileStorage extends Storage
 
 $telegraphText = new TelegraphText('Иван', 'text.txt');
 $telegraphText->editText("я", "умный");
-$telegraphText->text = 1;
+$telegraphText->text;
 echo $telegraphText->text;
+
 //$telegraphText->editText("Толик", "привет");
 //$telegraphText->storeText;
 //$telegraphText->loadText();
