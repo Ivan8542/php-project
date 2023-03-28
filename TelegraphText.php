@@ -291,7 +291,7 @@ class FileStorage extends Storage
 
 $telegraphText = new TelegraphText('Иван', 'text.txt');
 $telegraphText->editText("я", "умный");
-$telegraphText->text;
+$telegraphText->text = 1;
 echo $telegraphText->text;
 
 //$telegraphText->editText("Толик", "привет");
@@ -302,9 +302,9 @@ echo $telegraphText->text;
 //$test = new FileStorage();
 //echo $test->create(new TelegraphText('Иван', 'text.txt'));
 
-
-$test1 = new FileStorage();
-$test1->create(new TelegraphText('Иван', 'text.txt'));
-var_dump($test1->list());
+//
+//$test1 = new FileStorage();
+//$test1->create(new TelegraphText('Иван', 'text.txt'));
+//var_dump($test1->list());
 
 
